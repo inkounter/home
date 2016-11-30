@@ -5,7 +5,7 @@ syntax on
 set tabstop=4
 set softtabstop=4
 set expandtab
-set autoindent 
+set autoindent
 set shiftwidth=4  "this is the level of autoindent, adjust to taste
 set ruler
 set backspace=indent,eol,start
