@@ -6,10 +6,6 @@ PS3='\[\e]0;\u@\h:\w\a\][\u@\h \W$(__git_ps1 " (%s)")]\$ '
 # allow everyone r/x permissions. only user has w permission
 umask 022
 
-bind -m vi-insert "\C-l":clear-screen
-bind -m vi-command "\C-l":clear-screen
-bind -m vi-insert "\C-p":
-
 # disable empty tab auto-completion
 shopt -s no_empty_cmd_completion
 
