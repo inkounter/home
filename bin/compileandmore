@@ -1,0 +1,70 @@
+#!/bin/bash
+
+function printUsage()
+{
+    cat <<EOF
+DESCRIPTION: Run a command and pipe stdout and stderr to files.
+
+USAGE: $0 [options] [commandArguments]
+
+OPTIONS:
+    -h | --help     Print this help.
+    --follow        Print all output instead of hiding stderr until exit.
+EOF
+}
+
+# The '--help' option must be the first option, otherwise assume that it's part
+# of the custom command.
+if [[ $# -gt 0 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    printUsage
+    exit
+fi
+
+follow=
+argIndex=1
+for arg in "$@"; do
+    if [ "$arg" = "--follow" ]; then
+        follow=true
+
+        # Re-set the args to exclude this '--follow' option .
+        set -- "${@:1:$((argIndex-1))}" "${@:$((argIndex+1)):$#}"
+        break
+    fi
+
+    argIndex=$((argIndex+1))
+done
+
+if [ $# -eq 0 ]; then
+    printUsage
+    exit 1
+fi
+
+function compileAndMore()
+{
+    makeCommand=$1
+    shift
+
+    compileDir=~/.tmp.compile
+    mkdir -p $compileDir
+
+    # delete any compile fils older than maxAge days
+    maxAge=3
+    find $compileDir/* -mtime +$maxAge -exec rm -f {} \;
+
+    compileFileBase="$compileDir/$(uname -n)_$(date '+%H%M%S_%N')"
+    compileFileErr=${compileFileBase}.err
+    compileFileStdOut=${compileFileBase}.stdout
+
+    if [ -z $follow ]; then
+        $makeCommand "$@" 2> $compileFileErr | tee $compileFileStdOut
+        local retVal=$?
+        more $compileFileErr
+    else
+        ((($makeCommand "$@" 3>&2 2>&1 1>&3) | tee $compileFileErr) 2>&1) | tee $compileFileStdOut
+        local retVal=$?
+    fi
+
+    return $retVal
+}
+
+compileAndMore "$@"

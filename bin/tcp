@@ -1,0 +1,64 @@
+#!/usr/bin/python
+
+# A script that continuously accepts TCP connections, prints out the data
+# received over the connection, and takes in filenames through stdin to
+# read and transmit back to the connected client.
+# This script keeps track of only the last connected client.
+
+import SocketServer
+import threading
+import sys
+import os
+import socket
+
+request = []
+request.append(None)
+
+#serverIP=socket.gethostname()
+serverIP='localhost'
+
+def handleThread(request):
+    outfile = open(os.path.expanduser('~/.tcptestReceived.log'), 'a');
+    while (1):
+        data = request.recv(1024)
+        if not data:
+            break
+        else:
+            print data
+            outfile.write(data + '\n')
+            outfile.flush()
+    outfile.close();
+
+class testTCPHandler(SocketServer.BaseRequestHandler):
+    def handle(self):
+        request[0] = self.request
+        print "request =", request
+        handleThread(self.request)
+
+def cmdLineListen():
+    while (1):
+        line = sys.stdin.readline().strip()
+        if request[0] and os.path.isfile(line):
+            with open (line, "r") as fileIn:
+                data = fileIn.read()
+                print "sending", line
+                request[0].sendall(data)
+        elif request[0]:
+            print os.listdir(os.getcwd())
+        else:
+            print "Client is not connected"
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print "usage:", sys.argv[0], "<listening port>"
+        sys.exit(0)
+
+    port = int(sys.argv[1])
+
+    cmdThread = threading.Thread(target=cmdLineListen)
+    cmdThread.daemon = True
+    cmdThread.start()
+
+    SocketServer.TCPServer.allow_reuse_address = True
+    server = SocketServer.TCPServer((serverIP, port), testTCPHandler)
+    server.serve_forever()
