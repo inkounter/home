@@ -26,6 +26,9 @@ set colorcolumn=80
 hi ColorColumn ctermbg=4
 set matchpairs+=<:>
 
+" don't expand folds on searches, show only one result per collapsed fold.
+set fdo-=search
+
 " modify what's saved in a Session.vim
 set ssop=folds,curdir,tabpages
 
@@ -37,7 +40,7 @@ set wildmenu
 set wildmode=full
 
 " Keymaps
-nmap <silent><esc><esc> :noh<CR>
+nmap <silent><esc> :noh<CR>
 nmap <silent><C-t> :tabnew<CR>
 nmap <silent><C-l> :tabnext<CR>
 nmap <silent><C-h> :tabprevious<CR>
@@ -180,12 +183,21 @@ command -nargs=* Run !%:p '<args>'
 " grep for current word
 function! GrepCurrentWord()
     let currentWord = expand("<cword>")
-    exe printf('!grep -rIw %s $(if [ -n "$(echo $(pwd) | grep unittest)" ]; then echo ".."; else echo "."; fi)', currentWord)
+
+    " If we're in a git repo, find the top level of the repo or the lowest
+    " level directory within the repo with a sentinel '.vimgrep' file.
+    let searchDir = system('relativeDir="./"; git branch &>>/dev/null; while [[ $? -eq 0 && -z "$(ls .vimgrep 2>>/dev/null)" ]]; do relativeDir+="../"; cd ..; git branch &>>/dev/null; done; echo -n ${relativeDir%../}')
+
+    let command = printf('grep -rIwn %s %s', currentWord, searchDir)
+
+    exe printf('!echo \$ %s && %s', command, command)
 endfunction
 command -nargs=0 Grep call GrepCurrentWord()
 
 " text insertions
 command -nargs=0 Break exe "normal O<esc>d0i///////////////////////////////////////////////////////////////////////////////<esc>j"
+
+set wildignore+=*/.git/*,*.o,*/build/*
 
 if filereadable(expand("~/.vim/environmentSpecific"))
     source ~/.vim/environmentSpecific
