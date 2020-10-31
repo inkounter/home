@@ -33,6 +33,6 @@ alias kl="kill -9 %+"
 # force UTF-8 encoding in tmux
 alias tmux='tmux -u'
 
-export GREP_OPTIONS="--color=auto --exclude-dir=.git --exclude=Session.vim --exclude=.*.swp --exclude=changelog"
+alias grep="grep --color=auto --exclude-dir=.git --exclude=Session.vim --exclude=.*.swp --exclude=changelog"
 
 [ -f ~/.surroundingEnvironment ] && . ~/.surroundingEnvironment
