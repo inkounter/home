@@ -3,3 +3,5 @@
 [user]
 	email = arnoldkao@gmail.com
 	name = Arnold Kao
+[credential "https://github.com"]
+	username = arnoldkao
