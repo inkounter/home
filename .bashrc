@@ -3,6 +3,9 @@
 PS1='\[\e[36m\](\@) \[\e[35m\][\h \W]\[\e[0m\]\$ '
 PS3='\[\e]0;\u@\h:\w\a\][\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
+export VISUAL=vim
+export EDITOR=vim
+
 # allow everyone r/x permissions. only user has w permission
 umask 022
 
