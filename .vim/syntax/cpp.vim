@@ -84,6 +84,14 @@ if version >= 508 || !exists("did_cpp_syntax_inits")
   delcommand HiLink
 endif
 
+" /////////////////////////////////////////////////////////////////////////////
+" Add BDE-specific syntax highlighting
+
+syn match cppModifier "\<BSLS_KEYWORD_[A-Z0-9_]\+\>"
+syn match cppModifier "\<BSLA_DEPRECATED\(_MESSAGE\)\?\>"
+syn match cppModifier "\<FCOT_DEPRECATE\>"
+" /////////////////////////////////////////////////////////////////////////////
+
 let b:current_syntax = "cpp"
 
 " vim: ts=8
