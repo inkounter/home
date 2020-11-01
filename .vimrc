@@ -1,3 +1,5 @@
+filetype plugin on
+
 syntax on
 
 "Information on the following setting can be found with
