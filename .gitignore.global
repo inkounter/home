@@ -1,0 +1,29 @@
+# ignore temporary files
+*~
+.#*
+*.sw?
+.nfs*
+
+# ignore object files, library files
+*.o
+*.so
+*.so.*
+*.a
+
+# ignore python compiled files
+*.pyc
+
+# ignore standard build directories
+build/amd64
+build/solaris10-sparc
+build/aix6-powerpc
+
+# ignore VIM session saves
+Session.vim
+
+# ignore the sentinel file used by my own .vimrc
+.vimgrep
+
+# ignore files that are usually just made by me.
+TODO
+venv

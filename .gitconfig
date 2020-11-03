@@ -5,3 +5,5 @@
 	name = Arnold Kao
 [credential "https://github.com"]
 	username = arnoldkao
+[core]
+	excludesFile = /home/akao/.gitignore.global
