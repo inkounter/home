@@ -31,6 +31,9 @@ set matchpairs+=<:>
 " don't expand folds on searches, show only one result per collapsed fold.
 set fdo-=search
 
+" modify how text wrapping works
+set formatoptions=qn2j
+
 " modify what's saved in a Session.vim
 set ssop=folds,curdir,tabpages
 
