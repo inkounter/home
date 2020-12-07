@@ -33,6 +33,7 @@ set fdo-=search
 
 " modify how text wrapping works
 set formatoptions=qn2j
+autocmd FileType * setlocal formatoptions-=ro
 
 " modify what's saved in a Session.vim
 set ssop=folds,curdir,tabpages
