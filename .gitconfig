@@ -4,6 +4,7 @@
 	email = arnoldkao@gmail.com
 	name = Arnold Kao
 [credential "https://github.com"]
-	username = arnoldkao
+	username = inkounter
+	helper = !/usr/bin/gh auth git-credential
 [core]
 	excludesFile = /home/akao/.gitignore.global
